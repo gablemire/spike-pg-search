@@ -79,6 +79,13 @@ styles as (
 		('south western')
 	) as styles(style)
 ),
+has_pools as (
+	select * from
+	(values
+		(true),
+		(false)
+	) as has_pools(has_pool)
+),
 collection_items as (
 	select 
 		nextval('seq_houses_collection') as id, 
@@ -104,15 +111,20 @@ collection_items as (
 			'size', size, 
 			'nb_rooms', nb_rooms, 
 			'material', material, 
-			'style', style
+			'style', style,
+			'has_pool', has_pool
 		) as attributes,
 		exterior_color,
 		size,
 		nb_rooms,
 		material,
-		style
+		style,
+		case
+			when has_pool then 'pool'
+			else ''
+		end as pool
 	from
-	exterior_colors, sizes , nb_rooms, materials, styles	
+	exterior_colors, sizes , nb_rooms, materials, styles, has_pools	
 )
 insert into search_product_items(store_id, product_item_id, type, lang, product_group_id, product_group_name, name, description, prices, attributes, search)
 select 
@@ -133,6 +145,7 @@ select
 		nb_rooms || ' ' ||
 		material || ' ' ||
 		style || ' ' || 
+		pool || ' ' || 
 		product_group_name || ' ' || 
 		name_prefix || id || ' ' || 
 		description) AS search

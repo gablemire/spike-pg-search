@@ -92,9 +92,9 @@ collection_items as (
 			when floor(random() * 100)::int % 4 = 0 then null
 			else jsonb_build_object(
 				'usd',
-				floor(random() * 100000 + 100),
+				floor(random() * 100000 + 100)::int,
 				'cad',
-				floor(random() * 100000 + 100)
+				floor(random() * 100000 + 100)::int
 			)
 		end as prices,
 		jsonb_build_object(
@@ -102,7 +102,17 @@ collection_items as (
 			'special_effect', special_effect, 
 			'element', element, 
 			'material', material, 
-			'charm', charm
+			'charm', charm,
+			'damage', json_build_object(
+				'min', floor(random() * 100 + 1)::int,
+				'max', floor(random() * 100 + 101)::int
+			),
+			'stunt_duration', json_build_object(
+				'min', random() * 500,
+				'max', random() * 500 + 500
+			),
+			'nb_kills', floor(random() * 100),
+			'allowed_in_pvp', floor(random() * 100)::int % 10 = 0
 		) as attributes,
 		color,
 		special_effect,
