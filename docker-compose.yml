@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:13.7-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: postgres_sa
+      POSTGRES_PASSWORD: unity123!
+      POSTGRES_DB: postgres
+      TZ: UTC
+    volumes:
+      - '.dev-initdb:/docker-entrypoint-initdb.d'
+      - '/var/lib/postgresql/data'
